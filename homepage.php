@@ -28,7 +28,11 @@ include("connect.php");
         $result = $stmt->get_result();
         $assc = $result->fetch_assoc();
 
-        echo $assc['firstname'].' '.$assc['lastname'];
+        if($assc == NULL) {
+            echo "null.";
+        } else if($assc != NULL) {
+            echo $assc['firstname'].' '.$assc['lastname'];
+        }
         //test
         //<button onclick="$result = $stmt->get_result();">Debug</button>
         //print_r($result->fetch_assoc()); 
