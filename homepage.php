@@ -30,7 +30,7 @@ include("connect.php");
 
         if($assc == NULL) {
             echo "null.";
-        } else if($assc != NULL) {
+        } else {
             echo $assc['firstname'].' '.$assc['lastname'];
         }
         //test
