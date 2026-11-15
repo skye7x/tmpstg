@@ -17,13 +17,13 @@ include("connect.php");
     <div style="text-align:center; padding:15%;">
       <p  style="font-size:50px; font-weight:bold;">
        Hello  <?php 
-       if(isset($_SESSION['email'])){
-        $email=$_SESSION['email'];
+       if(isset($_SESSION['usrid'])){ // z email na ID
+        $id=$_SESSION['usrid'];
 
 
         // $query=mysqli_query($conn, "SELECT users.* FROM `users` WHERE users.email='$email'"); SQLI prevention steps 3
-        $stmt = $conn->prepare("SELECT users.* FROM `users` WHERE users.email=?");
-        $stmt->bind_param("s", $email);
+        $stmt = $conn->prepare("SELECT users.* FROM `users` WHERE users.id=?");
+        $stmt->bind_param("i", $id);
         $stmt->execute();
         $result = $stmt->get_result();
         $assc = $result->fetch_assoc();
