@@ -65,6 +65,7 @@ if(isset($_POST['signIn'])){
     if($row != NULL) {
         $hash = $row['password'];
         //if( $row && password_verify($password, $hash) ){
+        // https://www.php.net/manual/en/function.password-verify.php
         if(password_verify($password, $hash) == TRUE ){
             session_start();
             $_SESSION['email']=$row['email'];

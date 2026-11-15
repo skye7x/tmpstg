@@ -31,9 +31,11 @@ include("connect.php");
         if($assc == NULL) {
             echo "null.";
         } else {
-            echo $assc['firstname'].' '.$assc['lastname'];
+            $tmp1 = $assc['firstname'].' '.$assc['lastname'];
+            echo htmlspecialchars($tmp1, ENT_QUOTES, 'UTF-8',true);
+            // https://www.php.net/manual/en/function.htmlspecialchars.php
         }
-        //test
+        //test  
         //<button onclick="$result = $stmt->get_result();">Debug</button>
         //print_r($result->fetch_assoc()); 
         //    echo "<pre>";
