@@ -68,6 +68,7 @@ if(isset($_POST['signIn'])){
         // https://www.php.net/manual/en/function.password-verify.php
         if(password_verify($password, $hash) == TRUE ){
             session_start();
+            session_regenerate_id(true); // nowy nr sesji PO JEJ OTWARCIU
             $_SESSION['email']=$row['email'];
             header("Location: homepage.php");
             exit();
