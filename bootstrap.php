@@ -1,6 +1,8 @@
+
 <?php
 ini_set('display_errors', '0');
 
+// Plik odpowidzialny za securrity stronki
 $https = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
 session_set_cookie_params([
     'lifetime' => 0,
