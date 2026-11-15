@@ -134,5 +134,19 @@ button:hover{
 .msg{ padding:8px 12px; margin-bottom:10px; border:1px solid #ddd; border-radius:6px; font-size:0.95rem; }
 .msg.error{ border-color:#dc2626; color:#dc2626; }
 .msg.ok{ border-color:#16a34a; color:#16a34a; }
-.home{ text-align:center; padding:15%; }
+.home{ text-align:center; padding:6% 15% 2%; }
 .home .hello{ font-size:50px; font-weight:bold; }
+
+/* --- upload plików (dashboard) --- */
+.dash{ max-width:720px; margin:0 auto 3rem; padding:0 1rem; }
+.dash h2{ font-size:1.3rem; margin-bottom:0.3rem; }
+.dash .usage{ font-size:0.9rem; color:#3f3f3f; margin-bottom:0.8rem; }
+.dash input[type=file]{ height:auto; padding:0.5rem; margin-bottom:0.5rem; }
+.dash .btn{ margin-bottom:1rem; }
+.files{ width:100%; border-collapse:collapse; font-size:0.95rem; }
+.files th, .files td{ text-align:left; padding:6px 8px; border-bottom:1px solid #ddd; }
+.files .fname{ word-break:break-all; }
+.files a{ color:rgb(125,125,235); text-decoration:none; }
+.files a:hover{ color:blue; text-decoration:underline; }
+.files .ttl.soon{ color:#dc2626; }
+.dash .empty{ color:#3f3f3f; }

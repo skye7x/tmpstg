@@ -1,0 +1,3 @@
+# pliki wgrane przez uzytkownikow (zachowaj tylko zabezpieczenie)
+media/*
+!media/.htaccess
