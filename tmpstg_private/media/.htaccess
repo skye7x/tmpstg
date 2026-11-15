@@ -1,0 +1,13 @@
+# Zakaz bezposredniego dostepu do plikow
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>
+Options -Indexes -ExecCGI
+RemoveHandler .php .phtml .php3 .php4 .php5 .phar
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>

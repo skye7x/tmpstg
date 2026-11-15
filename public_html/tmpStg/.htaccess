@@ -1,0 +1,17 @@
+# --- tmpStg: ustawienia produkcyjne (Hostido / LiteSpeed czyta .htaccess) ---
+Options -Indexes
+
+RewriteEngine On
+
+# Wymuś HTTPS (najpierw upewnij się, że AutoSSL wystawił certyfikat dla domeny!)
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Pliki ukryte (.git, .env, .user.ini itd.) zawsze 404; .well-known zostaje dla odnowień certyfikatu
+RewriteRule (^|/)\.(?!well-known) - [R=404,L]
+
+# Pliki, które nigdy nie powinny być pobierane przez przeglądarkę
+<FilesMatch "\.(md|sql|log|bak|ini|inc)$">
+    Require all denied
+</FilesMatch>
