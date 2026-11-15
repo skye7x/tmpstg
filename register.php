@@ -3,9 +3,9 @@
 include 'connect.php';
 
 if(isset($_POST['signUp'])){
-    $firstName=$_POST['fName'];
-    $lastName=$_POST['lName'];
-    $email=$_POST['email'];
+    $firstName = trim($_POST['fName']);
+    $lastName=trim($_POST['lName']);
+    $email=trim($_POST['email']);
     $password=$_POST['password'];
     $password=password_hash($password, PASSWORD_DEFAULT);
 
