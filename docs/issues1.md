@@ -6,7 +6,7 @@
 | 2 | MD5 → password_hash() | <b>Zrobione</b> |
 | 3 | XSS w homepage.php |  <b>Zrobione</b> |
 | 4 | Sesje (logout, regenerate_id, ID zamiast emaila) | <b>Zrobione</b> |
-| 5 | Ochrona homepage.php | Do zrobienia |
+| 5 | Ochrona homepage.php | <b>Zrobione</b> |
 | 6 | connect.php |  Do zrobienia |
 | 7 | Walidacja po stronie serwera |  Do zrobienia |
 | 8 | UNIQUE na emailu, komunikaty, logout przez POST |  Do zrobienia |

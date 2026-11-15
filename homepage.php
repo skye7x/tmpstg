@@ -3,9 +3,20 @@
 session_start();
 include("connect.php");
 
+//check for user login to acces homepage
+if(!isset($_SESSION['usrid'])) {
+        echo 'Login session not found, <a href="/tmpStg" style="
+            background-color: black;
+            color: yellow;
+            padding: 2px 10px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 13px;
+        ">LOGIN</a> first.';
+        session_destroy();
+        exit;
+}
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,7 +28,7 @@ include("connect.php");
     <div style="text-align:center; padding:15%;">
       <p  style="font-size:50px; font-weight:bold;">
        Hello  <?php 
-       if(isset($_SESSION['usrid'])){ // z email na ID
+       //if(isset($_SESSION['usrid'])){ // z email na ID
         $id=$_SESSION['usrid'];
 
 
@@ -47,7 +58,7 @@ include("connect.php");
             print_r($assc);
             echo "</pre>";
         } */
-       }
+       //}
        ?>
 
 <!--
