@@ -7,8 +7,11 @@ if(isset($_POST['signUp'])){
     $lastName=trim($_POST['lName']);
     $email=trim($_POST['email']);
     $password=$_POST['password'];
-    $password=password_hash($password, PASSWORD_DEFAULT);
 
+    if($firstName === '' || mb_strlen($firstName) > 50 || $lastName === '' || mb_strlen($lastName) > 50 || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 254 || strlen($password) < 10 || strlen($password) > 128){
+        echo "Invalid input.";
+        exit;
+    }
     // SQL Injection prevention
     /*
     $checkEmail="SELECT * From users where email='$email'";
@@ -19,6 +22,11 @@ if(isset($_POST['signUp'])){
     $stmt->execute(); // Wykonanie zapytania SQL
     $result=$stmt->get_result(); // GET i SET wyników zapytania
 
+
+    
+    $password=password_hash($password, PASSWORD_DEFAULT);
+
+    
     if($result->num_rows>0){
         echo "Email Address Already Exists !";
     }
