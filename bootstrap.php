@@ -1,6 +1,5 @@
 <?php
-// Dołączaj na początku KAŻDEJ strony: require 'bootstrap.php';
-ini_set('display_errors', '0');          // błędy tylko do logu, nigdy na ekran
+ini_set('display_errors', '0');
 
 $https = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
 session_set_cookie_params([
