@@ -7,7 +7,7 @@ if(isset($_POST['signUp'])){
     $lastName=$_POST['lName'];
     $email=$_POST['email'];
     $password=$_POST['password'];
-    $password=md5($password);
+    $password=password_hash($password, PASSWORD_DEFAULT);
 
     // SQL Injection prevention
     /*
@@ -46,28 +46,38 @@ if(isset($_POST['signUp'])){
 if(isset($_POST['signIn'])){
    $email=$_POST['email'];
    $password=$_POST['password'];
-   $password=md5($password) ;
 
    // SQL Injection prevention
    /*
    $sql="SELECT * FROM users WHERE email='$email' and password='$password'";
    $result=$conn->query($sql);
    */
-    $stmt3=$conn->prepare("SELECT * FROM users WHERE email=? and password=?"); // Przygotowanie zapytania SQL z parametrami
-    $stmt3->bind_param("ss",$email,$password); // Przypisanie wartości zmiennych $email i $password do parametrów w zapytaniu
+    $stmt3=$conn->prepare("SELECT * FROM users WHERE email=?"); // Przygotowanie zapytania SQL z parametrami
+    $stmt3->bind_param("s",$email); // Przypisanie wartości zmiennych $email i $password do parametrów w zapytaniu
     $stmt3->execute(); // Wykonanie zapytania SQL
     $result3=$stmt3->get_result(); // GET i SET wyników zapytania
+    //print_r($result3);
+    
+    $row=$result3->fetch_assoc(); // $row to tablica asocjacyjna => ['passsword'] -> xxxxxxxxxx
 
-   if($result3->num_rows>0){
-    session_start();
-    $row=$result3->fetch_assoc();
-    $_SESSION['email']=$row['email'];
-    header("Location: homepage.php");
-    exit();
-   }
-   else{
-    echo "Not Found, Incorrect Email or Password";
-   }
+    // function password_verify(#[\SensitiveParameter] string $password, string $hash): bool
+    // znaleziono użytkownika po emailu: $row to tabelka z danymi (to liczy się jako “prawda”),
+    if($row != NULL) {
+        $hash = $row['password'];
+        //if( $row && password_verify($password, $hash) ){
+        if(password_verify($password, $hash) == TRUE ){
+            session_start();
+            $_SESSION['email']=$row['email'];
+            header("Location: homepage.php");
+            exit();
+        }
+        else{
+        echo "Not Found, Incorrect Email or Password";
+        }
+    }
+    else{
+        echo "Not Found, Incorrect Email or Password";
+    }
 
 }
 ?>
