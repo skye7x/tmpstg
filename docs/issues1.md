@@ -8,7 +8,7 @@
 | 4 | Sesje (logout, regenerate_id, ID zamiast emaila) | <b>Zrobione</b> |
 | 5 | Ochrona homepage.php | <b>Zrobione</b> |
 | 6 | connect.php |  <b>Zrobione</b> |
-| 7 | Walidacja po stronie serwera |  Do zrobienia |
+| 7 | Walidacja po stronie serwera |  <b>Zrobione</b> |
 | 8 | UNIQUE na emailu, komunikaty, logout przez POST |  Do zrobienia |
 | 9 | Sprzątanie HTML |  Do zrobienia |
 | 10 | CSRF, limit prób, cookie, HTTPS | Na koniec |

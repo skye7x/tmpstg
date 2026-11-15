@@ -12,3 +12,11 @@ SignInButton.addEventListener('click', function() {
     SignUpForm.style.display = 'none';
     SignInForm.style.display = 'block';
 });
+
+const pwd = document.querySelector('input[name="password"]');
+
+pwd.addEventListener('input', () => {
+    const len = pwd.value.length;
+    document.getElementById('hint-min').classList.toggle('ok', len >= 10);
+    document.getElementById('hint-max').classList.toggle('ok', len > 0 && len <= 128);
+});

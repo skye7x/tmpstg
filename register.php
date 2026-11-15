@@ -9,7 +9,15 @@ if(isset($_POST['signUp'])){
     $password=$_POST['password'];
 
     if($firstName === '' || mb_strlen($firstName) > 50 || $lastName === '' || mb_strlen($lastName) > 50 || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 254 || strlen($password) < 10 || strlen($password) > 128){
-        echo "Invalid input.";
+        echo "Invalid input. Maybe check password length?";
+        echo ' <a href="/tmpStg/" style="
+            background-color: black;
+            color: yellow;
+            padding: 2px 10px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 13px;
+        ">Register again here</a> !';
         exit;
     }
     // SQL Injection prevention
@@ -26,7 +34,7 @@ if(isset($_POST['signUp'])){
     
     $password=password_hash($password, PASSWORD_DEFAULT);
 
-    
+
     if($result->num_rows>0){
         echo "Email Address Already Exists !";
     }
