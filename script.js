@@ -3,18 +3,25 @@ const SignInButton = document.getElementById('signInButton');
 const SignInForm = document.getElementById('signin');
 const SignUpForm = document.getElementById('signup');
 
-SignUpButton.addEventListener('click', function() {
+function showSignUp() {
     SignInForm.style.display = 'none';
     SignUpForm.style.display = 'block';
-});
-
-SignInButton.addEventListener('click', function() {
+}
+function showSignIn() {
     SignUpForm.style.display = 'none';
     SignInForm.style.display = 'block';
-});
+}
 
-const pwd = document.querySelector('input[name="password"]');
+SignUpButton.addEventListener('click', function (e) { e.preventDefault(); showSignUp(); });
+SignInButton.addEventListener('click', function (e) { e.preventDefault(); showSignIn(); });
 
+// po błędzie rejestracji (index.php?error=invalid#signup) pokaż formularz rejestracji
+if (location.hash === '#signup') {
+    showSignUp();
+}
+
+// podpowiedzi o haśle (tylko UX; prawdziwa walidacja jest w register.php)
+const pwd = document.getElementById('suPassword');
 pwd.addEventListener('input', () => {
     const len = pwd.value.length;
     document.getElementById('hint-min').classList.toggle('ok', len >= 10);

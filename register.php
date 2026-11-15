@@ -1,61 +1,42 @@
-<?php 
+<?php
+require 'bootstrap.php';
+require 'connect.php';
 
-include 'connect.php';
-
-if(isset($_POST['signUp'])){
-    $firstName = trim($_POST['fName']);
-    $lastName=trim($_POST['lName']);
-    $email=trim($_POST['email']);
-    $password=$_POST['password'];
-
-    if($firstName === '' || mb_strlen($firstName) > 50 || $lastName === '' || mb_strlen($lastName) > 50 || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 254 || strlen($password) < 10 || strlen($password) > 128){
-        echo "Invalid input. Maybe check password length?";
-        echo ' <a href="/tmpStg/" style="
-            background-color: black;
-            color: yellow;
-            padding: 2px 10px;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 13px;
-        ">Register again here</a> !';
-        exit;
-    }
-    // SQL Injection prevention
-    /*
-    $checkEmail="SELECT * From users where email='$email'";
-    $result=$conn->query($checkEmail);
-    */
-    $stmt=$conn->prepare("SELECT * From users where email=?"); // Przygotowanie zapytania SQL z parametrem
-    $stmt->bind_param("s",$email); // Przypisanie wartości zmiennej $email do parametru w zapytaniu
-    $stmt->execute(); // Wykonanie zapytania SQL
-    $result=$stmt->get_result(); // GET i SET wyników zapytania
-
-
-    
-    $password=password_hash($password, PASSWORD_DEFAULT);
-
-
-    if($result->num_rows>0){
-        echo "Email Address Already Exists !";
-    }
-    else{
-        $stmt2 = $conn->prepare("INSERT INTO users(firstName,lastName,email,password) VALUES (?, ?, ?, ?)");
-        $stmt2->bind_param("ssss", $firstName, $lastName, $email, $password); // 4x s bo 4 warsci tekstweo
-        //$stmt2->execute();
-        /*
-        $insertQuery="INSERT INTO users(firstName,lastName,email,password)
-                       VALUES ('$firstName','$lastName','$email','$password')";
-        */
-                       // INSERT zwraca boola TYLKO do metody execute!
-        if($stmt2->execute() == TRUE){
-            header("location: /tmpstg/");
-            exit;
-        }
-        else{
-            echo "Error:".$stmt2->error;
-        }
-     }
-   
-
+if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['signUp'])) {
+    header('Location: index.php');
+    exit;
 }
-?>
+csrf_check();
+
+$firstName = trim((string)($_POST['fName'] ?? ''));
+$lastName  = trim((string)($_POST['lName'] ?? ''));
+$email     = strtolower(trim((string)($_POST['email'] ?? '')));
+$password  = (string)($_POST['password'] ?? '');   // surowe, bez trim
+
+// Walidacja PRZED bazą i PRZED password_hash
+if ($firstName === '' || mb_strlen($firstName) > 50
+    || $lastName === '' || mb_strlen($lastName) > 50
+    || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 254
+    || strlen($password) < 10 || strlen($password) > 128) {
+    header('Location: index.php?error=invalid#signup');
+    exit;
+}
+
+$hash = password_hash($password, PASSWORD_DEFAULT);
+
+try {
+    $stmt = $conn->prepare("INSERT INTO users (firstname, lastname, email, password) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("ssss", $firstName, $lastName, $email, $hash);
+    $stmt->execute();
+} catch (mysqli_sql_exception $e) {
+    // 1062 = duplikat emaila (UNIQUE). Udajemy, że wszystko OK (brak user enumeration).
+    if ($e->getCode() !== 1062) {
+        error_log($e->getMessage());
+        http_response_code(500);
+        exit("Something went wrong, try again later.");
+    }
+}
+
+// Ta sama odpowiedź niezależnie od tego, czy email był wolny
+header('Location: index.php?registered=1');
+exit;

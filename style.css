@@ -129,3 +129,10 @@ button:hover{
 .password-hints li.ok::marker {
     content: "✓ ";
 }
+/* --- dodane w kroku 9/10 (CSP bez inline styles) --- */
+#signup{ display:none; }
+.msg{ padding:8px 12px; margin-bottom:10px; border:1px solid #ddd; border-radius:6px; font-size:0.95rem; }
+.msg.error{ border-color:#dc2626; color:#dc2626; }
+.msg.ok{ border-color:#16a34a; color:#16a34a; }
+.home{ text-align:center; padding:15%; }
+.home .hello{ font-size:50px; font-weight:bold; }

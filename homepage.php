@@ -1,20 +1,24 @@
-
 <?php
-session_start();
-include("connect.php");
+require 'bootstrap.php';
+require 'connect.php';
 
-//check for user login to acces homepage
-if(!isset($_SESSION['usrid'])) {
-        echo 'Login session not found, <a href="/tmpStg" style="
-            background-color: black;
-            color: yellow;
-            padding: 2px 10px;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 13px;
-        ">LOGIN</a> first.';
-        session_destroy();
-        exit;
+// Tylko dla zalogowanych
+if (!isset($_SESSION['usrid'])) {
+    header('Location: index.php');
+    exit;
+}
+
+$id = (int)$_SESSION['usrid'];
+$stmt = $conn->prepare("SELECT firstname, lastname FROM users WHERE id = ?");
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$user = $stmt->get_result()->fetch_assoc();
+
+if ($user === null) {            // konto usunięte, a sesja jeszcze żyje
+    $_SESSION = [];
+    session_destroy();
+    header('Location: index.php');
+    exit;
 }
 ?>
 <!DOCTYPE html>
@@ -23,52 +27,15 @@ if(!isset($_SESSION['usrid'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>tmpStg</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div style="text-align:center; padding:15%;">
-      <p  style="font-size:50px; font-weight:bold;">
-       Hello  <?php 
-       //if(isset($_SESSION['usrid'])){ // z email na ID
-        $id=$_SESSION['usrid'];
-
-
-        // $query=mysqli_query($conn, "SELECT users.* FROM `users` WHERE users.email='$email'"); SQLI prevention steps 3
-        $stmt = $conn->prepare("SELECT users.* FROM `users` WHERE users.id=?");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $assc = $result->fetch_assoc();
-
-        if($assc == NULL) {
-            echo "null.";
-        } else {
-            $tmp1 = $assc['firstname'].' '.$assc['lastname'];
-            echo htmlspecialchars($tmp1, ENT_QUOTES, 'UTF-8',true);
-            // https://www.php.net/manual/en/function.htmlspecialchars.php
-        }
-        //test  
-        //<button onclick="$result = $stmt->get_result();">Debug</button>
-        //print_r($result->fetch_assoc()); 
-        //    echo "<pre>";
-        //    print_r($result->fetch_assoc());
-        //    echo "</pre>";
-        /*
-        if (isset($_POST['debug'])) {
-            echo "<pre>";
-            print_r($assc);
-            echo "</pre>";
-        } */
-       //}
-       ?>
-
-<!--
-        <form method="POST">
-            <button type="submit" name="debug">Debug</button>
+    <div class="home">
+        <p class="hello">Hello <?= e($user['firstname'] . ' ' . $user['lastname']) ?> :)</p>
+        <form method="post" action="logout.php">
+            <input type="hidden" name="csrf" value="<?= e($_SESSION['csrf']) ?>">
+            <button type="submit">Logout</button>
         </form>
--->
-
-      </p>
-        <a href="logout.php">Logout</a>
     </div>
 </body>
 </html>
